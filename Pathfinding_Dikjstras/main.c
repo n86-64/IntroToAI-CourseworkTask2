@@ -40,6 +40,7 @@ char currentMap[MAXX][MAXY]; //<===================NEW
  *  void   ReadComandLineAndSetMap(int argc, const char * argv[]);     <===============NEW
  *  void CopyMap( const char from[MAXX][MAXY], char to[MAXX][MAXY]);   <=============NEW ( but you don't need to use it)
  *  void PrintMap (char map[MAXX][MAXY]);                              <======== NEW (but you don't need to use it)
+ *
  *  this checks if a candidate soltuion is at a given co-ordinate
  * int IsSolutionAtCoordinates( candidateSolution thisSol, int x, int y);   <============== NEW
  *
@@ -48,6 +49,31 @@ char currentMap[MAXX][MAXY]; //<===================NEW
  */
 //************************ don't edit anything above this line***********************//
 
+
+
+void FindNeighboursAndAddToList() 
+{
+	int x, y;
+	candidateSolution solutionBuffer; 
+
+	for (x = workingCandidate.variableValues[PARENTXCOORD] - 1; x <= workingCandidate.variableValues[PARENTXCOORD] + 1; x++)
+	{
+		for (y = workingCandidate.variableValues[PARENTYCOORD] - 1; y <= workingCandidate.variableValues[PARENTYCOORD] + 1; y++) 
+		{
+			if (x < MINX || x > MAXX || y < MINY || y > MAXY || (x == workingCandidate.variableValues[PARENTXCOORD] && y == workingCandidate.variableValues[PARENTYCOORD])) 
+			{
+			}
+			else 
+			{
+				solutionBuffer.variableValues[XCOORD] = x;
+				solutionBuffer.variableValues[YCOORD] = y;
+				solutionBuffer.score = currentListOfCandidates.listEntries[GetIndexOfWorkingCandidateInThisList(currentListOfCandidates)].score;
+			
+				if(solutionBuffer.score > solutionBuffer.)
+			}
+		}
+	}
+}
 
 int main(int argc, const char * argv[])
 {
@@ -89,24 +115,51 @@ int main(int argc, const char * argv[])
 
 				//add it to the open list
 				AddWorkingCandidateToCurrentList();
+
 				//andmarkthis cell on the map as open for graphical display
 				currentMap[x][y] = OPEN;
 			}
 		}
 	}
         
-    
     //set the working candidate to the start position
     workingCandidate.variableValues[XCOORD] = workingCandidate.variableValues[PARENTXCOORD] = STARTX;
     workingCandidate.variableValues[YCOORD] = workingCandidate.variableValues[PARENTYCOORD] =  STARTY;
     workingCandidate.score = 0;
 
+
     PrintWorkingCandidate();
     
     //Now we will go into a while loop examining solutions until we get to the goal
 
+	int i;
 
-    
+	while (!IsSolutionAtCoordinates(workingCandidate,ENDX,ENDY)) 
+	{
+		// Do code evaluation here. 
+		// Step 1- Find Neighboring grid spaces
+		// Step 2 - evaluate them from the list putting them in order on the examined list for possible review later/
+		// Step 3 - Update working candidate with new solution or if its poor then backtrack to last solution. 
+
+		UpdateDistancesOfUnvisitedNeighboursOfWorkingCandidate(); // Set the distances using this function.
+		FindNeighboursAndAddToList(); // gets the neighbours to the current position. 
+
+		for (i = 0; i < listOfExaminedCandidates.indexOfLastEntryAdded; i++) 
+		{
+			workingCandidate.variableValues[XCOORD] = listOfExaminedCandidates.listEntries[i].variableValues[XCOORD];
+			workingCandidate.variableValues[YCOORD] = listOfExaminedCandidates.listEntries[i].variableValues[YCOORD];
+			workingCandidate.score = listOfExaminedCandidates.listEntries[i].score;
+
+			
+			if ((workingCandidate.score + SQEUCLIDEAN_DISTANCE(workingCandidate.variableValues[XCOORD], workingCandidate.variableValues[YCOORD], workingCandidate.variableValues[PARENTXCOORD], workingCandidate.variableValues[PARENTYCOORD]))) // TODO - Add evaluation to check the quality of the distance. 
+			{
+
+			}
+		}
+	}
+
+	PrintFinalSolutionAndExit();
+
     // end of  while loop dealing with search
     
     //if you are at the goal print out the ending message

@@ -214,7 +214,7 @@ void   ReadComandLineAndSetMap(int argc, const char * argv[])
     //use map1 as default
     if(argc==1)
         CopyMap(map4, currentMap);
-    //or read it from the command lien if one argum,ent is given
+    //or read it from the command lien if one argument is given
     else if(argc==2)
       {
         idOfMap = (int) atoi(argv[1]);
