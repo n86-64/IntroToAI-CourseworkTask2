@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\worlds.h">
+      <Filter>Dependancies\Maps and worlds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PathFindingSpecificDefinitions.h">
+      <Filter>Dependancies\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PathFindingSpecificSolutionOperations.h">
+      <Filter>Dependancies\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SolutionListOperations.h">
+      <Filter>Dependancies\Data Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StructureDefinitions.h">
+      <Filter>Dependancies\Data Structures</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\main.c" />
+    <ClCompile Include="..\worlds.c">
+      <Filter>Dependancies\Maps and worlds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PathFindingSpecificSolutionOperations.c">
+      <Filter>Dependancies\PathFinding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SolutionListOperations.c">
+      <Filter>Dependancies\Data Structures</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dependancies">
+      <UniqueIdentifier>{ddca2339-3d24-4db3-976c-17cdf4f09429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependancies\Maps and worlds">
+      <UniqueIdentifier>{5ae85a14-c4f2-417c-bb00-2e0b184d328f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependancies\PathFinding">
+      <UniqueIdentifier>{dc34430b-5380-4913-a418-593b171aa3cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependancies\Data Structures">
+      <UniqueIdentifier>{f66883b5-4406-48c0-8df7-3c8d8d47a441}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
