@@ -8,7 +8,7 @@
 
 #include "PathFindingSpecificSolutionOperations.h"
 
-
+#pragma warning (disable : 4996)
 
 
 
@@ -150,6 +150,7 @@ void PrintFinalSolutionAndExit(void)
     //make sure we can access the proposed solution
     extern candidateSolution workingCandidate;
     int position;
+	char testchar = '/0';
     
     //check that working candidate should be at the exit
     if ( IsSolutionAtCoordinates(workingCandidate, ENDX, ENDY) != 1)
@@ -175,8 +176,9 @@ void PrintFinalSolutionAndExit(void)
 #endif
 
       }
+
+	 scanf("%c", &testchar);
     exit(0);
-    
 }
 
 

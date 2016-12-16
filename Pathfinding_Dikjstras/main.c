@@ -49,30 +49,20 @@ char currentMap[MAXX][MAXY]; //<===================NEW
  */
 //************************ don't edit anything above this line***********************//
 
-
-
-void FindNeighboursAndAddToList() 
+candidateSolution FindNeighbourWithSmallestDistance() 
 {
-	int x, y;
-	candidateSolution solutionBuffer; 
+	int i;
+	candidateSolution solutionToReturn = currentListOfCandidates.listEntries[0];
 
-	for (x = workingCandidate.variableValues[PARENTXCOORD] - 1; x <= workingCandidate.variableValues[PARENTXCOORD] + 1; x++)
+	for (i = 1; i < currentListOfCandidates.indexOfLastEntryAdded; i++) 
 	{
-		for (y = workingCandidate.variableValues[PARENTYCOORD] - 1; y <= workingCandidate.variableValues[PARENTYCOORD] + 1; y++) 
+		if (solutionToReturn.score > currentListOfCandidates.listEntries[i].score && currentListOfCandidates.listEntries[i].score != BIGDIST) 
 		{
-			if (x < MINX || x > MAXX || y < MINY || y > MAXY || (x == workingCandidate.variableValues[PARENTXCOORD] && y == workingCandidate.variableValues[PARENTYCOORD])) 
-			{
-			}
-			else 
-			{
-				solutionBuffer.variableValues[XCOORD] = x;
-				solutionBuffer.variableValues[YCOORD] = y;
-				solutionBuffer.score = currentListOfCandidates.listEntries[GetIndexOfWorkingCandidateInThisList(currentListOfCandidates)].score;
-			
-				if(solutionBuffer.score > solutionBuffer.)
-			}
+			solutionToReturn = currentListOfCandidates.listEntries[i];
 		}
 	}
+
+	return solutionToReturn;
 }
 
 int main(int argc, const char * argv[])
@@ -80,14 +70,13 @@ int main(int argc, const char * argv[])
     
     /* the next set of variables get used within our main function
      * but aren't declared globally becuase we don't want the other functions to change them inadvertently */
-    
-    int indexOfSolutionWeAreLookingAt; //index in list of current solution being examined
-    int closestSoFar; //used to find which to move next   <=======NEW
-    int closestEstimatedDistance; //used to find which to move next    <=======NEW
+
+	int solutionIndex = 0;
+	int solutionsEvaluated = 0;
     int x,y; //<=====might be useful
 
 
-                        //start off by emptying the lists of candidate solutions
+    //start off by emptying the lists of candidate solutions
     CleanListsOfSolutionsToStart();
     CleanWorkingCandidate();
     
@@ -127,46 +116,31 @@ int main(int argc, const char * argv[])
     workingCandidate.variableValues[YCOORD] = workingCandidate.variableValues[PARENTYCOORD] =  STARTY;
     workingCandidate.score = 0;
 
-
-    PrintWorkingCandidate();
+	PrintWorkingCandidate();
     
     //Now we will go into a while loop examining solutions until we get to the goal
-
-	int i;
-
-	while (!IsSolutionAtCoordinates(workingCandidate,ENDX,ENDY)) 
+	while (!IsSolutionAtCoordinates(workingCandidate, ENDX, ENDY) && currentListOfCandidates.indexOfLastEntryAdded != NOTFOUND) 
 	{
-		// Do code evaluation here. 
-		// Step 1- Find Neighboring grid spaces
-		// Step 2 - evaluate them from the list putting them in order on the examined list for possible review later/
-		// Step 3 - Update working candidate with new solution or if its poor then backtrack to last solution. 
+		UpdateDistancesOfUnvisitedNeighboursOfWorkingCandidate(); // this function performs the distance evaluation for us so we dont need to the only thing we need to do is to maintain the loop.
 
-		UpdateDistancesOfUnvisitedNeighboursOfWorkingCandidate(); // Set the distances using this function.
-		FindNeighboursAndAddToList(); // gets the neighbours to the current position. 
+		// once we have evaluated the neighbours we need to sort the items into a list based on the distance from the start node. 
+		// Take the best node in terms of duistance and assign this to the working candidate and repeat until we find the goal state. 
+		// i.e. A* but with distance from goal taken into account. 
+		currentMap[workingCandidate.variableValues[XCOORD]][workingCandidate.variableValues[YCOORD]] = CLOSED;
 
-		for (i = 0; i < listOfExaminedCandidates.indexOfLastEntryAdded; i++) 
-		{
-			workingCandidate.variableValues[XCOORD] = listOfExaminedCandidates.listEntries[i].variableValues[XCOORD];
-			workingCandidate.variableValues[YCOORD] = listOfExaminedCandidates.listEntries[i].variableValues[YCOORD];
-			workingCandidate.score = listOfExaminedCandidates.listEntries[i].score;
+		solutionIndex = GetIndexOfWorkingCandidateInThisList(currentListOfCandidates);
+		AddSolutionPram1_ToListParam2(&currentListOfCandidates.listEntries[GetIndexOfWorkingCandidateInThisList(currentListOfCandidates)], &listOfExaminedCandidates);
+		RemoveFromListParam1_CandidateSolutionAtIndexParam2(&currentListOfCandidates, GetIndexOfWorkingCandidateInThisList(currentListOfCandidates));
 
-			
-			if ((workingCandidate.score + SQEUCLIDEAN_DISTANCE(workingCandidate.variableValues[XCOORD], workingCandidate.variableValues[YCOORD], workingCandidate.variableValues[PARENTXCOORD], workingCandidate.variableValues[PARENTYCOORD]))) // TODO - Add evaluation to check the quality of the distance. 
-			{
+		workingCandidate = FindNeighbourWithSmallestDistance();
 
-			}
-		}
+		solutionsEvaluated++;
 	}
 
 	PrintFinalSolutionAndExit();
 
     // end of  while loop dealing with search
-    
-    //if you are at the goal print out the ending message
-    
-    
-    
-    return 0;
+    //if you are at the goal print out the ending message. 
 }
 
 
